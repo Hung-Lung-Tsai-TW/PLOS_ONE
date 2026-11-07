@@ -13,6 +13,8 @@ This repository contains the custom computational scripts and meteorological dat
   Custom Python script developed for cohort construction, environmental feature engineering (THI/DTR), statistical association modeling (HC3-robust OLS regressions and date-aligned repeated-record linear mixed models), and classification diagnostics.
 - **`29沙鹿.csv`**  
   Ambient meteorological dataset from the local Shalu monitoring station utilized for microclimate exposure assessment.
+- **`KEY_VARIABLE_DICTIONARY_R40_REVIEWER_20261106.md`**  
+  Key variable dictionary for reviewers, documenting the variables used in the analysis script and their definitions, so that the manuscript tables and figures can be traced to the corresponding code and data fields.
 - **`README.md`**  
   Project documentation, data availability policy, software environment requirements, and replication instructions.
 
