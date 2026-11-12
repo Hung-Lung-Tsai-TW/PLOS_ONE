@@ -4,13 +4,15 @@
 
 This repository provides the analysis code, Shalu meteorological data and key variable dictionary. The pipeline reconstructs the cohorts, calculates the original-specification and revision analyses, and exports the manuscript tables and figures. Individual-level clinical data are restricted and are not included in this repository.
 
+The current entry point is **`r41_analysis_v3.py`**, exported from `R41_analysis_v3.ipynb`. It retains the original and revision analyses and adds **S17 Table**, a matched legacy-versus-reconstructed-weather sensitivity analysis for the original Table 5, S5 Table and S7 Table B/C classification specifications. The previous R40 Python entry point has been replaced; its earlier versions remain available in Git history.
+
 ## Supported execution environment
 
 **Run the current script in a Google Colab Python notebook with Google Drive mounted.** Its startup imports `google.colab`, mounts Drive, and sets the study paths. Running the script directly from an ordinary local terminal is not the supported workflow for this version.
 
-The saved execution output in `R40_20261106_1200_analysis_caption_notes_revised_v2.ipynb` records **Python 3.13.18** and **IPython 7.34.0**. These are the recorded Colab environment versions, not a claim that every current or future Colab runtime has the same environment. The Python script records `sys.version`; it does not enforce an exact Python patch version.
+The script records the actual Python version (`sys.version`) and imported package versions for each run; it does not enforce an exact Python patch version. Retain the generated `runtime_versions.json` with the results rather than assuming that every Colab session has the same environment.
 
-The following package versions match both the script's analysis-library checks and that saved execution output:
+The following package versions are the exact analysis-library requirements checked by `r41_analysis_v3.py`:
 
 | Package to install | Import name | Required version |
 |---|---|---|
@@ -26,15 +28,15 @@ The following package versions match both the script's analysis-library checks a
 | openpyxl | `openpyxl` | 3.1.5 |
 | Pillow | `PIL` | 11.3.0 |
 
-Keep Colab's working IPython installation. The script imports and records IPython but explicitly exempts it from exact-version equality. Although its `REQUIRED_VERSIONS` dictionary retains the earlier IPython baseline `9.18.1`, the recorded Colab run used `7.34.0`; upgrading to `9.18.1` is not required.
+Keep Colab's working IPython installation. The script imports and records IPython but explicitly exempts it from exact-version equality. Although its `REQUIRED_VERSIONS` dictionary retains the earlier IPython baseline `9.18.1`, upgrading to `9.18.1` is not required.
 
 ## Repository contents
 
 | File | Purpose |
 |---|---|
-| `r40_20261106_1200_analysis_caption_notes_revised_v2.py` | Full analysis and publication-export pipeline, exported from Colab. |
+| `r41_analysis_v3.py` | Full Colab analysis and publication-export pipeline, including the appended R41/S17 sensitivity analysis. |
 | `29沙鹿.csv` | Shalu hourly meteorological source file used by the pipeline. |
-| `KEY_VARIABLE_DICTIONARY_R40_REVIEWER_20261106.md` | Concise variable definitions and code-field mapping for reviewers. |
+| `KEY_VARIABLE_DICTIONARY_R40_REVIEWER_20261106.md` | Existing concise variable definitions and code-field mapping for reviewers; retains its original versioned filename. S17-specific definitions are also exported with S17. |
 | `README.md` | Colab setup, input requirements, output locations and controlled-access information. |
 
 Use the script and public weather file from the same repository version. Record the Git commit used for each reproduction; `main` can change.
@@ -138,7 +140,7 @@ If the study root was changed in the script, make the same path change in this c
 Run the script **inside the Colab notebook kernel**:
 
 ```python
-%run /content/PLOS_ONE/r40_20261106_1200_analysis_caption_notes_revised_v2.py
+%run /content/PLOS_ONE/r41_analysis_v3.py
 ```
 
 The startup mounts Drive again if necessary, assigns the study paths, checks inputs and versions, and creates fresh run directories. Analyses execute in their existing dependency order. Do not run only the final export statements in a fresh session: they depend on the models and summaries calculated earlier in the script.
@@ -153,14 +155,33 @@ Each complete execution creates a new publication directory:
 HB-DXA/OUTPUT/Publication_clean_<UTC timestamp>_<run identifier>/
 ```
 
-The final export covers **27 publication items**: Tables 1–5, S1–S16 Tables, Figs 1–3 and S1–S3 Figs, without renumbering. It writes:
+The base export covers **27 publication items**: Tables 1–5, S1–S16 Tables, Figs 1–3 and S1–S3 Figs, without renumbering. It writes:
 
 - Table workbooks and canonical CSVs, such as `Table1.xlsx`, `Table1.csv`, `S16_Table.xlsx` and `S16_Table.csv`.
 - CSVs for every workbook sheet under `Sheets/`; a canonical table CSV contains only the selected display panel, not necessarily the entire workbook.
 - TIFF figures and available PNG companions, with caption/note text files.
 - `Export_log.csv`, `Worksheet_index.csv`, `Path_redaction_log.csv`, `runtime_versions.json`, `Historical_display_differences.csv` and `File_manifest.csv`.
 
-Successful completion prints `Completed 27 publication items` and the output path. Retain the actual runtime-version record and file manifest with the code commit identifier. The script calculates current results from inputs; historical manuscript values retained for reconciliation are labeled separately and do not replace those calculations.
+**The message `Completed 27 publication items` marks completion of the base export only.** The R41/S17 analysis runs afterwards. It writes an additional publication item, bringing the full script's scope to **28 items**, in a separate subdirectory of the same publication run:
+
+```text
+HB-DXA/OUTPUT/Publication_clean_<UTC timestamp>_<run identifier>/
+└── S17_R41_<UTC timestamp>_<run identifier>/
+    ├── Supplementary_Tables/
+    │   ├── S17_Table_rerun.xlsx
+    │   └── S17_Table_for_Word.html
+    ├── Notes/
+    │   └── S17_Table_caption_and_notes.txt
+    ├── Audit/
+    ├── run_status.json
+    └── S17_manifest.csv
+```
+
+S17 retains all three hourly-completeness thresholds (18/20/24 hours) and the original classification specifications. Within each threshold, clinical-only, legacy-weather and reconstructed-calendar-weather arms use the same retained participants and train/test splits. The analysis includes 189 model fits and paired test-record bootstrap summaries for the fixed-test-set Brier comparison. Its notes explicitly identify the change from a 365-day hot-day count to a hot-day fraction among valid observed days. S13 remains the separate forward-evaluation analysis; S16 covers the original S4 six-classifier specification.
+
+Verify that the final `R41／S17 4` summary reports `Completed=True`, `S17_exported=True`, `All_passed=True`, and matching requested/succeeded fit counts. These fields are also recorded in the S17 subdirectory's `run_status.json`. The base `File_manifest.csv` is produced before S17 and does not inventory the appended S17 files; retain **both** manifests. A successful base export followed by an S17 error is not a completed R41 run.
+
+Retain the actual runtime-version record, both file manifests and the code commit identifier. The script calculates current results from inputs; historical manuscript values retained for reconciliation are labeled separately and do not replace those calculations. Older notebook names and hashes inside provenance records identify the source specifications and are not execution entry points.
 
 Private working copies, record-level audits and intermediate analysis outputs are stored separately under:
 
