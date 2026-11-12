@@ -36,8 +36,10 @@ Keep Colab's working IPython installation. The script imports and records IPytho
 |---|---|
 | `r41_analysis_v3.py` | Full Colab analysis and publication-export pipeline, including the appended R41/S17 sensitivity analysis. |
 | `29沙鹿.csv` | Shalu hourly meteorological source file used by the pipeline. |
-| `KEY_VARIABLE_DICTIONARY_R40_REVIEWER_20261106.md` | Existing concise variable definitions and code-field mapping for reviewers; retains its original versioned filename. S17-specific definitions are also exported with S17. |
+| `KEY_VARIABLE_DICTIONARY_R41_REVIEWER_20261112.md` | Concise frozen variable definitions and code-field mapping for R41, including the S17 populations, weather definitions, split preservation and evaluation rules. |
 | `README.md` | Colab setup, input requirements, output locations and controlled-access information. |
+
+**Versioned release:** [v1.0.5](https://github.com/Hung-Lung-Tsai-TW/PLOS_ONE/releases/tag/v1.0.5) packages the R41 script, R41 variable dictionary, public weather file and this Colab documentation. Earlier tags are retained; v1.0.4 identifies the earlier R40 snapshot.
 
 Use the script and public weather file from the same repository version. Record the Git commit used for each reproduction; `main` can change.
 
@@ -104,6 +106,7 @@ In the restarted notebook, run the following once in a fresh runtime:
 
 ```python
 !git clone https://github.com/Hung-Lung-Tsai-TW/PLOS_ONE.git /content/PLOS_ONE
+!git -C /content/PLOS_ONE checkout --detach v1.0.5
 !git -C /content/PLOS_ONE rev-parse HEAD
 ```
 
