@@ -35,7 +35,7 @@ Keep Colab's working IPython installation. The script imports and records IPytho
 | File | Purpose |
 |---|---|
 | `r41_analysis_v3.py` | Full Colab analysis and publication-export pipeline, including the appended R41/S17 sensitivity analysis. |
-| `29沙鹿.csv` | Shalu hourly meteorological source file used by the pipeline. |
+| `29沙鹿.csv` | Shalu hourly meteorological source file used by the pipeline.https://data.moenv.gov.tw/en/dataset/detail/AQX_P_07 |
 | `KEY_VARIABLE_DICTIONARY_R41_REVIEWER_20261112.md` | Concise frozen variable definitions and code-field mapping for R41, including the S17 populations, weather definitions, split preservation and evaluation rules. |
 | `README.md` | Colab setup, input requirements, output locations and controlled-access information. |
 
